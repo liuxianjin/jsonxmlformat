@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON XML格式化</title>
+  <link href="index.css" type="text/css" rel="stylesheet" />
+  <script src="index.js"></script>
+  <script type="text/javascript" src="handle.js"></script>
+  <script src="xmlformat.js"></script>
+</head>
+<body>
+<button onclick="toggle('JSON')">格式化JSON</button>
+<button onclick="toggle('XML')">格式化XML</button>
+<div style="height: 98%;width: 97vw;" id="json-format">
+  <fieldset style="width: 100%; display: inline-block; height: 98%">
+    <legend class="title" style="font-size: 20px;font-weight: 600;">JSON格式化</legend>
+    <textarea id="RawJson" rows="12" onchange="Process()"></textarea>
+    <div id="ControlsRow">
+      <input type="Button" value="格式化" onclick="Process()" />
+      <span id="TabSizeHolder">
+            缩进量
+            <select id="TabSize" onchange="TabSizeChanged()">
+              <option value="1">1</option>
+              <option value="2" selected="true">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </span>
+      <label for="QuoteKeys">
+        <input
+          type="checkbox"
+          id="QuoteKeys"
+          onclick="QuoteKeysClicked()"
+          checked="true"
+        />
+        引号 </label
+      >&nbsp;
+      <a href="javascript:void(0);" onclick="SelectAllClicked()">全选</a>
+      &nbsp;
+      <span id="CollapsibleViewHolder">
+            <label for="CollapsibleView">
+              <input
+                type="checkbox"
+                id="CollapsibleView"
+                onclick="CollapsibleViewClicked()"
+                checked="true"
+              />
+              显示控制
+            </label>
+          </span>
+      <span id="CollapsibleViewDetail">
+            <a href="javascript:void(0);" onclick="ExpandAllClicked()">展开</a>
+            <a href="javascript:void(0);" onclick="CollapseAllClicked()">叠起</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(3)">2级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(4)">3级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(5)">4级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(6)">5级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(7)">6级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(8)">7级</a>
+            <a href="javascript:void(0);" onclick="CollapseLevel(9)">8级</a>
+          </span>
+      <div id="Canvas" class="Canvas"></div>
+    </div>
+  </fieldset>
+</div>
+<div style="height: 98%;width: 97vw;display: none" id="xml-format">
+  <fieldset style="width: 100%; display: inline-block;">
+    <legend class="title" style="font-size: 20px;font-weight: 600;">XML格式化</legend>
+    <div id="app">
+          <textarea
+            rows="12"
+            style="width: 100%; display: block"
+            onchange="xmlFormat()"
+            id="xmlformat"
+          ></textarea>
+      <button onclick="xmlFormat()" style="margin: 5px 0 5px 0;">格式化</button>
+      <textarea
+        rows="40"
+        style="width: 100%; display: block"
+        id="output"
+      ></textarea>
+    </div>
+  </fieldset>
+  <a href=""></a>
+</div>
+
+<script>
+  let search = location.search.split('=')[1];
+  toggle(search);
+  if (search === "JSON") {
+    try {
+      let element = document.getElementById("RawJson");
+      element.select();
+      element.setSelectionRange(0, element.value.length);
+      document.execCommand("paste");
+      Process();
+    } catch (e) {
+    }
+  }
+  if (search === "XML") {
+    try {
+      let element = document.getElementById("xmlformat");
+      element.select();
+      element.setSelectionRange(0, element.value.length);
+      document.execCommand("paste");
+      xmlFormat();
+    } catch (e) {
+    }
+  }
+  function xmlFormat() {
+    document.getElementById("output").value = formateXml(
+      document.getElementById("xmlformat").value.trim()
+    );
+  }
+
+  function toggle(type) {
+    let jsonCtrl = document.getElementById("json-format");
+    let xmlCtrl = document.getElementById("xml-format");
+    if (type === "JSON") {
+      jsonCtrl.style.display = "block";
+      xmlCtrl.style.display = "none";
+    }
+    if (type === "XML") {
+      jsonCtrl.style.display = "none";
+      xmlCtrl.style.display = "block";
+    }
+  }
+</script>
+</body>
+</html>
